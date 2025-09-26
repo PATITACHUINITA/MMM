@@ -1,67 +1,57 @@
 import flet as ft
-import time
 
-def main(page: ft.Page):
-    page.title = "¿Me perdonas?"
-    page.bgcolor=ft.Colors.RED_ACCENT_100
-    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-    page.vertical_aliginment = ft.MainAxisAlignment.CENTER
+page.title = "App de Saludo y Despedida"     # Título de la ventana
+page.horizontal_alignment = ft.CrossAxisAlignment.CENTER  # Centrar en horizontal
+page.vertical_alignment = ft.MainAxisAlignment.CENTER    # Centrar en vertical
+page.theme_mode = ft.ThemeMode.LIGHT         # Tema claro
+page.bgcolor = "#F0F8FF"                     # Fondo azul muy claro
 
-    label=ft.Text(
-        "¿Me perdonas?", 
-        style=ft.TextStyle(size=40,weight="bold")
+mensaje = ft.Text(
+    value="Presiona un botón 👇",
+    size=24,
+    weight=ft.FontWeight.BOLD,
+    color="black"
+)
+
+def saludar(e):
+    mensaje.value = "¡Hola! 😃 Bienvenido a la app"
+    mensaje.color = "#008000"   # Verde
+    page.update()               # Actualiza la UI
+
+def despedir(e):
+    mensaje.value = "¡Adiós! 👋 Que tengas un gran día"
+    mensaje.color = "#FF4500"   # Naranja
+    page.update()               # Actualiza la UI
+
+btn_saludo = ft.ElevatedButton(
+    text="Saludar",
+    icon=ft.icons.SENTIMENT_SATISFIED,    # Icono carita feliz
+    style=ft.ButtonStyle(
+        bgcolor={"": "#4CAF50"},          # Fondo verde
+        color={"": "white"},              # Texto blanco
+        padding=20,                       # Espaciado interno
+        shape=ft.RoundedRectangleBorder(radius=15)  # Bordes redondeados
+    ),
+    on_click=saludar                      # Acción al hacer clic
+)
+btn_despedida = ft.ElevatedButton(
+    text="Despedirse",
+    icon=ft.icons.WAVING_HAND,            # Icono de mano saludando
+    style=ft.ButtonStyle(
+        bgcolor={"": "#FF5722"},          # Fondo naranja
+        color={"": "white"},              # Texto blanco
+        padding=20,
+        shape=ft.RoundedRectangleBorder(radius=15)
+    ),
+    on_click=despedir                     # Acción al hacer clic
+)
+page.add(
+    mensaje,   # El texto
+    ft.Row(
+        [btn_saludo, btn_despedida],      # Los dos botones
+        alignment=ft.MainAxisAlignment.CENTER,  # Centrar
+        spacing=30                         # Espacio entre botones
     )
+)
 
-    image = ft.Image(src="triste.png", width=200, height=200)
-
-    button_yes = ft.ElevatedButton(text="Sí",color=ft.Colors.GREEN,width=100,height=50)
-    button_no = ft.ElevatedButton(text="No",color=ft.Colors.RED,width=100,height=50)
-    button_maybe = ft.ElevatedButton(text="Quizás",color=ft.Colors.YELLOW,width=100,height=50)
-
-    def no_click(e):
-        button_yes.width+=20
-        button_yes.height+=10
-        page.update()
-
-    def yes_click(e):
-        image.src = "feliz.png"
-        image.update()
-
-    def maybe_click(e):
-        image.src="Quizá.png"
-        image.update()
-
-        time.sleep(2)
-        reset_app()
-
-    def reset_app():
-        image.src = "triste.png"
-        button_yes.width=100
-        button_yes.height=50
-        page.update()
-
-    button_no.on_click = no_click
-    button_yes.on_click = yes_click
-    button_maybe.on_click = maybe_click
-
-    page.add(
-        ft.Column(
-            [
-                label,
-                image,
-                ft.Row(
-                    [
-                        button_yes,
-                        button_no,
-                        button_maybe
-                    ],
-                    alignment=ft.MainAxisAlignment.CENTER,
-                )
-            ],
-            alignment=ft.MainAxisAlignment.CENTER,
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-            spacing=20,
-        )
-    )
-
-ft.app(main)
+ft.app(target=main)
